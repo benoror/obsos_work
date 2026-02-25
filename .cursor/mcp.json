@@ -6,7 +6,8 @@
         "workspace-mcp",
         "--tools",
         "docs",
-        "drive"
+        "drive",
+        "calendar"
       ],
       "env": {
         "GOOGLE_OAUTH_CLIENT_ID": "your-client-id.apps.googleusercontent.com",

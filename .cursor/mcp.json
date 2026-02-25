@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "google-workspace": {
+      "command": "uvx",
+      "args": [
+        "workspace-mcp",
+        "--tools",
+        "docs",
+        "drive"
+      ],
+      "env": {
+        "GOOGLE_OAUTH_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
+        "GOOGLE_OAUTH_CLIENT_SECRET": "GOCSPX-your-secret",
+        "USER_GOOGLE_EMAIL": "you@example.com",
+        "OAUTHLIB_INSECURE_TRANSPORT": "1"
+      }
+    }
+  }
+}

@@ -23,7 +23,8 @@ Custom Cursor skills live in `.cursor/skills/`. Each has a `SKILL.md` with usage
 | ├ `/followup-todos <path>` | Extract from a specific meeting note | |
 | └ `/followup-todos` | Pick from recent meetings | |
 | [commit](.cursor/skills/commit/SKILL.md) | Stage modified files and commit with confirmation | |
-| └ *(sequence mode)* | Deferred commit — used by `/meeting wrap` | |
+| ├ `/commit` | Standalone — commit pending changes from any skill | |
+| └ *(sequence mode)* | Deferred — sub-skills skip, caller commits once at the end | |
 
 ## Rules
 

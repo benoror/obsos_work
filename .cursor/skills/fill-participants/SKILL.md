@@ -99,7 +99,7 @@ For meetings where participants genuinely can't be determined:
 
 ## Step 7: Offer to commit
 
-See [/commit](../commit/SKILL.md).
+See [/commit](../commit/SKILL.md). Skip when called as part of a sequence (e.g. `/meeting wrap`).
 
 ## Important Notes
 

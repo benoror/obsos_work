@@ -1,6 +1,6 @@
 ---
 name: meeting
-description: Creates a new Obsidian meeting note in the vault. Supports manual creation with a title or selecting from today's Google Calendar events. Use when the user says /meeting or asks to create a meeting note.
+description: Creates a new Obsidian meeting note or wraps up an existing one. Supports manual creation, Google Calendar selection, and a wrap-up workflow that caches notes, fills participants, and extracts todos in sequence. Use when the user says /meeting or asks to create or wrap up a meeting note.
 ---
 
 # Meeting
@@ -10,6 +10,7 @@ description: Creates a new Obsidian meeting note in the vault. Supports manual c
 - `/meeting {title}` — Create a meeting note with the given title and today's date.
 - `/meeting {title} folder={subfolder}` — Create in a specific subfolder under `Meetings/`.
 - `/meeting` (no args) — List today's Google Calendar events and let the user pick one. *(Requires Google Calendar MCP — see Setup below.)*
+- `/meeting wrap <path>` — Wrap up an existing meeting by running `/cache-notes`, `/fill-participants`, and `/followup-todos` in sequence, with a single commit at the end.
 
 ## Workspace Layout
 
@@ -106,9 +107,26 @@ Case-insensitive matching. If no shorthand matches and the folder doesn't exist,
 6. **Create the file** following the same steps as Mode A (steps 3-6).
 7. **Pre-fill Participants** from calendar attendees by matching against `Teams/People/` files. Use `[[@Name]]` wikilink format. Flag any unmatched attendees.
 
+## Mode C: Wrap Up (`/meeting wrap`)
+
+**Input**: `/meeting wrap <path>` — path to an existing meeting note (e.g. `Meetings/PAM/Ben x Zak Sync - 2026-02-25.md`)
+
+If `<path>` is omitted, list today's meeting files under `Meetings/` and let the user pick one.
+
+### Workflow
+
+This is a **sequenced workflow** — sub-skills skip their individual commit steps.
+
+1. **`/cache-notes <path>`** — If `Notes:` frontmatter is empty, prompt the user to paste external resource URLs first. Then fetch and cache AI transcripts.
+2. **`/fill-participants <path>`** — Resolve and fill the `Participants:` frontmatter if missing. If already filled, skip silently.
+3. **`/followup-todos <path>`** — Extract action items and propose todos from the now-cached content and manual notes.
+4. **Commit** — See [/commit](../commit/SKILL.md). Stage all files modified across the three sub-skills. Commit message: `update: /meeting wrap <path>`.
+
+Between each sub-skill, re-read the file to pick up changes from the previous step.
+
 ## Offer to Commit
 
-See [/commit](../commit/SKILL.md).
+See [/commit](../commit/SKILL.md). Applies to Mode A and Mode B only — Mode C handles its own commit at the end of the sequence.
 
 ## Important Notes
 

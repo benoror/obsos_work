@@ -52,8 +52,8 @@ Reference these for patterns and to avoid duplication:
 
 | Skill | Purpose |
 |-------|---------|
-| `/meeting` | Create meeting notes (manual or from Google Calendar) |
-| `/cache-notes` | Fetch & embed AI transcripts as Obsidian callouts |
+| `/meeting` | Create meeting notes (manual / Google Calendar) or wrap up with `/meeting wrap` |
+| `/cache-notes` | Fetch & embed AI transcripts as Obsidian callouts (prompts for URLs if empty) |
 | `/fill-participants` | Resolve and fill Participants frontmatter |
 | `/followup-todos` | Extract action items as Obsidian Tasks checkboxes |
-| `/commit` | Shared commit-and-stage workflow |
+| `/commit` | Shared commit-and-stage workflow (supports sequence mode) |

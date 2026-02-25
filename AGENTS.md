@@ -8,11 +8,11 @@ Custom Cursor skills live in `.cursor/skills/`. Each has a `SKILL.md` with usage
 
 | Skill | Slash command | What it does |
 |-------|--------------|--------------|
-| [meeting](.cursor/skills/meeting/SKILL.md) | `/meeting` | Create meeting notes (manual title or Google Calendar picker) |
-| [cache-notes](.cursor/skills/cache-notes/SKILL.md) | `/cache-notes` | Fetch external AI transcripts (Gemini, Otter) and cache as Obsidian callouts |
+| [meeting](.cursor/skills/meeting/SKILL.md) | `/meeting`, `/meeting wrap` | Create meeting notes (manual / Google Calendar) or wrap up (cache → participants → todos → commit) |
+| [cache-notes](.cursor/skills/cache-notes/SKILL.md) | `/cache-notes` | Fetch external AI transcripts (Gemini, Otter) and cache as Obsidian callouts. Prompts for URLs if `Notes:` is empty |
 | [fill-participants](.cursor/skills/fill-participants/SKILL.md) | `/fill-participants` | Resolve and fill `Participants:` frontmatter from Google Docs / filename / context |
 | [followup-todos](.cursor/skills/followup-todos/SKILL.md) | `/followup-todos` | Extract action items from notes & AI transcripts into Obsidian Tasks checkboxes |
-| [commit](.cursor/skills/commit/SKILL.md) | `/commit` | Shared final step — stage modified files and commit with user confirmation |
+| [commit](.cursor/skills/commit/SKILL.md) | `/commit` | Shared final step — stage modified files and commit with user confirmation. Supports sequence mode |
 
 ## Rules
 

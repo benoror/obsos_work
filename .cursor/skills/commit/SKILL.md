@@ -13,6 +13,12 @@ This skill is invoked as the **final step** of any skill that modifies files. It
 See [/commit](../commit/SKILL.md).
 ```
 
+## Sequence Mode
+
+When a skill is called as part of a **sequenced workflow** (e.g. `/meeting wrap`), the caller is responsible for the single commit at the end. Individual skills **skip** their commit step in this case.
+
+How to detect: the calling workflow will explicitly state it is running sub-skills in sequence. When you are executing a sub-skill within a sequence, do not offer to commit — just proceed to the next sub-skill. The sequence owner commits once at the end with a combined message.
+
 ## Workflow
 
 ### Step 1: Offer to commit
@@ -21,15 +27,15 @@ After all edits are applied, ask the user if they'd like to commit the changes.
 
 ### Step 2: Stage only modified files
 
-- Only stage files that were actually modified by the current skill invocation.
+- Only stage files that were actually modified by the current skill invocation (or the full sequence).
 - Do NOT stage unrelated files that may have changed via iCloud sync or Obsidian plugins.
 - Use `git add` with **explicit file paths** — never `git add .` or `git add -A`.
 
 ### Step 3: Commit message
 
-Default format: `update: /{skill-name} {argument}`
+**Standalone**: `update: /{skill-name} {argument}`
 
-Where `{skill-name}` is the calling skill (e.g. `fill-participants`, `cache-notes`) and `{argument}` is `all` or the specific path/target used.
+**Sequence**: `update: /{workflow-name} {argument}` (e.g. `update: /meeting wrap Meetings/PAM/Some Meeting.md`)
 
 ### Step 4: Confirm and commit
 

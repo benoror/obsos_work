@@ -11,6 +11,8 @@ description: Fetches external meeting resources (Gemini Google Docs, Otter.ai) a
 - `/cache-notes <path>` — Cache notes for a specific meeting file.
 - `/cache-notes refresh <path>` — Re-fetch and overwrite existing cached content for a file.
 
+If the target file has an **empty `Notes:` property** (no URLs yet), prompt the user to paste the external resource URLs (Google Docs, Otter.ai, etc.). Add them to the `Notes:` frontmatter, then proceed with fetching and caching as normal.
+
 ## How It Works
 
 External meeting resources (Google Docs, Otter.ai) linked in frontmatter `Notes:` are fetched, parsed by provider, and embedded as **collapsible Obsidian callouts** directly in the meeting note. A `NotesCached:` frontmatter timestamp marks the file as cached.
@@ -102,8 +104,9 @@ All cached content goes under a top-level `## 🤖 AI Notes` section appended af
 ### Mode: Specific file (`/cache-notes <path>`)
 
 1. **Read the file**. Check frontmatter for `Notes:` links and `NotesCached:`.
-2. If `NotesCached:` exists and this is not a `refresh`, inform the user and stop.
-3. For each Google Docs URL in `Notes:`:
+2. If `Notes:` is empty or absent, **prompt the user** to paste the external resource URL(s). Add them to the `Notes:` frontmatter property using `StrReplace`, then continue.
+3. If `NotesCached:` exists and this is not a `refresh`, inform the user and stop.
+4. For each Google Docs URL in `Notes:`:
    a. Extract the document ID.
    b. Fetch via `google-workspace-get_doc_content`.
    c. Parse into sections.
@@ -138,7 +141,7 @@ Use grep to find candidates:
 
 ## Offer to Commit
 
-See [/commit](../commit/SKILL.md).
+See [/commit](../commit/SKILL.md). Skip when called as part of a sequence (e.g. `/meeting wrap`).
 
 ## Important Notes
 

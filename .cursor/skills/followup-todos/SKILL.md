@@ -107,7 +107,7 @@ After inserting, optionally add a `TodosExtracted: YYYY-MM-DDTHH:MM:SS-06:00` fr
 
 ### Step 6: Offer to commit
 
-See [/commit](../commit/SKILL.md).
+See [/commit](../commit/SKILL.md). Skip when called as part of a sequence (e.g. `/meeting wrap`).
 
 ## Important Notes
 

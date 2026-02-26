@@ -106,13 +106,14 @@ All cached content goes under a top-level `## 🤖 AI Notes` section appended af
 1. **Read the file**. Check frontmatter for `Notes:` links and `NotesCached:`.
 2. If `Notes:` is empty or absent, **prompt the user** to paste the external resource URL(s). Add them to the `Notes:` frontmatter property using `StrReplace`, then continue.
 3. If `NotesCached:` exists and this is not a `refresh`, inform the user and stop.
-4. For each Google Docs URL in `Notes:`:
+4. **Verify each URL** before caching (see URL Verification below).
+5. For each verified Google Docs URL in `Notes:`:
    a. Extract the document ID.
    b. Fetch via `google-workspace-get_doc_content`.
    c. Parse into sections.
-4. Build the callout blocks.
-5. If the file already has callout blocks (refresh mode), replace them. Otherwise append after frontmatter `---`.
-6. Set `NotesCached:` in frontmatter to current timestamp.
+6. Build the callout blocks.
+7. If the file already has callout blocks (refresh mode), replace them. Otherwise append after frontmatter `---`.
+8. Set `NotesCached:` in frontmatter to current timestamp.
 
 ### Mode: All (`/cache-notes all`)
 
@@ -120,6 +121,56 @@ All cached content goes under a top-level `## 🤖 AI Notes` section appended af
 2. Present the list to the user with count. Ask for confirmation before proceeding.
 3. Process each file per the specific-file workflow above.
 4. Report results: successes, failures, skipped (Otter-only).
+
+## URL Verification
+
+Before caching, verify that each external resource actually corresponds to the meeting note. This prevents accidentally caching the wrong document when a user pastes an incorrect URL.
+
+### How it works
+
+1. **Extract the meeting date** from the note. Try these sources in order until one yields a date:
+   - Filename date pattern (any format — see Date Parsing below)
+   - `created:` frontmatter timestamp
+2. **Fetch the document title** from the Google Docs API response (the `File:` line returned by `get_doc_content`, e.g. `"Daily Standup - 2026/02/24 09:43 EST - Notes by Gemini"`).
+3. **Extract the date from the doc title** (any format — see Date Parsing below).
+4. **Compare**: normalize both dates to `YYYY-MM-DD` and check equality.
+   - If the dates match, proceed silently.
+   - If the dates **don't match**, warn the user:
+
+```
+⚠️ Date mismatch for Meetings/PAM/Scrum/2026-02-24.md:
+   Note date:     2026-02-24
+   Doc title:     "Daily Standup - 2026/02/26 09:41 EST - Notes by Gemini"
+   Doc date:      2026-02-26
+
+Wrong document? [Continue anyway / Skip this URL / Replace URL]
+```
+
+4. **If no date is found** in the doc title, fall back to a title similarity check — warn if the doc title has no obvious overlap with the meeting note's title (e.g. a "Sprint Retro" doc linked to a "Daily Standup" note).
+5. **In batch mode** (`/cache-notes all` or `/meeting wrap pending`), collect all mismatches and present them together before proceeding, rather than interrupting one by one.
+
+### Date Parsing
+
+Dates can appear in many formats across filenames and doc titles. Recognize at least:
+
+| Format | Example | Source |
+|--------|---------|--------|
+| `YYYY-MM-DD` | `2026-02-24` | Note filenames |
+| `YYYY/MM/DD` | `2026/02/24` | Gemini doc titles |
+| `MM/DD/YYYY` | `02/24/2026` | US-style |
+| `DD/MM/YYYY` | `24/02/2026` | Intl-style |
+| `Month DD, YYYY` | `February 24, 2026` | Long form |
+| `Mon DD, YYYY` | `Feb 24, 2026` | Short form |
+| `DD Month YYYY` | `24 February 2026` | Intl long form |
+| ISO 8601 | `2026-02-24T09:43:00` | Frontmatter timestamps |
+
+When ambiguous (e.g. `02/03/2026` — Feb 3 or Mar 2?), prefer the interpretation closest to the note's date. If still ambiguous, skip verification and don't warn.
+
+### Skip verification
+
+Verification is skipped for:
+- `refresh` mode (the URL was already verified on first cache)
+- Non-Google Docs URLs (Otter.ai, etc.)
 
 ## Detecting Uncached Files
 

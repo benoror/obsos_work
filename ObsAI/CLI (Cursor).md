@@ -1,12 +1,11 @@
 ---
-modified: 2026-02-25T11:22:03-06:00
+modified: 2026-02-27T09:32:54-06:00
 created: 2026-02-25T09:26:57-06:00
 ---
-# Google Wrokspace MCP
-
-https://github.com/taylorwilsdon/google_workspace_mcp
 # ToDo's
 
+- [ ] /fill-participants infer
+	- There are several notes with names/firstnames/nicknames, sometimes preceded by an @ symbol, that are not directly linked to the appropriate @People. Can you search and propose replace to enhance context linking?
 - [x] `/meeting` ✅ 2026-02-25
 	- Can you create a skill for yourself called `/meeting` that can A) Create a new meeting file with with a "{title} - YYYY-MM-DD" format B) Optionally select a specific meeting from today's Google Calendar and create the appropriate note (we'll need to add & setup a Google Calendar integration for this)
 - [x] /fill-participants ✅ 2026-02-25

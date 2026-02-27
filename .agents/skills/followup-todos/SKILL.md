@@ -16,22 +16,65 @@ The meeting file should ideally have cached AI transcripts (from `/cache-notes`)
 
 ## Obsidian Tasks Format
 
-Todos use the Obsidian Tasks plugin syntax:
+Todos use the [Obsidian Tasks](https://publish.obsidian.md/tasks/) plugin syntax. A full task line looks like:
 
 ```markdown
-- [ ] Description 📅 YYYY-MM-DD 🔼
+- [ ] [[@Assignee]] Description 🔼 🛫 2026-03-01 📅 2026-03-07 🔁 every week
 ```
 
-| Element | Format | Required |
-|---------|--------|----------|
-| Checkbox | `- [*]` — `[ ]` open, `[x]` done, `[/]` in progress, `[-]` cancelled | Yes |
-| Assignee | `[[@Name]]` prefix | If not the user |
-| Description | Free text | Yes |
-| Due date | `📅 YYYY-MM-DD` | Optional |
-| Priority | `🔺` (highest), `⏫` (high), `🔼` (medium), `🔽` (low) | Optional |
-| Completion | `- [x]` with `✅ YYYY-MM-DD` | When done |
+### Checkbox states
 
-Nested sub-tasks use tab indentation:
+| State | Syntax | Meaning |
+|-------|--------|---------|
+| Open | `- [ ]` | Not started |
+| Done | `- [x]` | Completed (append `✅ YYYY-MM-DD`) |
+| In progress | `- [/]` | Started |
+| Cancelled | `- [-]` | Cancelled (append `❌ YYYY-MM-DD`) |
+
+### Task components (recommended order)
+
+| Element | Emoji | Format | Required |
+|---------|-------|--------|----------|
+| Checkbox | — | `- [*]` | Yes |
+| Assignee | — | `[[@Name]]` wikilink prefix | If not the user |
+| Description | — | Free text | Yes |
+| Priority | `🔺⏫🔼🔽` | After description | Optional |
+| Created date | `➕` | `➕ YYYY-MM-DD` | Optional (auto-set if desired) |
+| Start date | `🛫` | `🛫 YYYY-MM-DD` — earliest date to begin work | Optional |
+| Scheduled date | `⏳` | `⏳ YYYY-MM-DD` — date planned to work on it | Optional |
+| Due date | `📅` | `📅 YYYY-MM-DD` — hard deadline | Optional |
+| Done date | `✅` | `✅ YYYY-MM-DD` | When completing |
+| Cancelled date | `❌` | `❌ YYYY-MM-DD` | When cancelling |
+| Recurrence | `🔁` | `🔁 every <interval>` (e.g. `every week`, `every month on the 1st`) | Optional |
+
+### Priorities
+
+```
+🔺 Highest — blocking, deadline this week, critical path
+⏫ High    — important but not urgent, next sprint
+🔼 Medium  — moderate urgency
+🔽 Low     — low urgency
+```
+
+### Date inference
+
+When extracting todos, infer dates from meeting context:
+
+| Phrase | Maps to |
+|--------|---------|
+| "today", "end of day" | `📅` = meeting date |
+| "tomorrow" | `📅` = meeting date + 1 |
+| "by Friday", "end of week" | `📅` = that Friday |
+| "Monday", "next week" | `📅` = next Monday |
+| "next sprint" | `🛫` = next sprint start (if known) |
+| "start working on X" | `🛫` = inferred start date |
+| "schedule for <date>" | `📅` = that date |
+
+When in doubt, include the date in the proposal table (Step 3) and let the user confirm.
+
+### Nested sub-tasks
+
+Use tab indentation:
 
 ```markdown
 - [ ] Main task 🔼
@@ -75,19 +118,21 @@ For each candidate action item (from manual notes, transcript todos, or implicit
    - `🔼` — Moderate urgency, nice-to-have.
    - `🔽` — Low urgency.
 
-4. **Due date**: Infer from context if mentioned ("by Friday", "next week", "end of sprint"). Otherwise omit.
+4. **Dates**: Infer from meeting context using the date inference table above. Assign `📅` (due), `🛫` (start), or `⏳` (scheduled) as appropriate. Omit if no date is mentioned or inferable.
 
-### Step 3: Present proposals to the user
+### Step 3: Present proposals to the user — MANDATORY CONFIRMATION
+
+**⚠️ STOP HERE AND WAIT FOR USER CONFIRMATION. Never skip this step, even during `/meeting wrap` sequences. Do NOT write todos to the file until the user explicitly approves.**
 
 Display a numbered table:
 
 ```
-| # | Add? | Todo | Owner | Priority | Due |
-|---|------|------|-------|----------|-----|
-| 1 | ✅   | Talk with Chris about temp environments | Me | 🔼 | — |
-| 2 | ✅   | Offload data lake work to Rob | Me | ⏫ | — |
-| 3 | ⬜   | Confirm travel plans for Friday | @Zak | — | — |
-| 4 | ⬜   | Verify Vtor's prod hash deployed | Me | 🔼 | 2026-02-24 |
+| # | Add? | Todo | Owner | Priority | Due 📅 | Start 🛫 | Scheduled ⏳ |
+|---|------|------|-------|----------|--------|----------|--------------|
+| 1 | ✅   | Talk with Chris about temp environments | Me | 🔼 | — | — | — |
+| 2 | ✅   | Offload data lake work to Rob | Me | ⏫ | — | — | — |
+| 3 | ⬜   | Confirm travel plans for Friday | @Zak | — | 2026-02-28 | — | — |
+| 4 | ⬜   | Verify Vtor's prod hash deployed | Me | 🔼 | 2026-02-24 | — | — |
 ```
 
 - Default `✅` for high-relevance items owned by the user.
@@ -96,10 +141,36 @@ Display a numbered table:
 
 ### Step 4: Insert confirmed todos
 
-Insert the confirmed todos into the note body:
-- **Placement**: After any existing user content but before `## AI Transcripts`. If no user content exists, insert right after the frontmatter closing `---`.
-- Use `StrReplace` targeting `## AI Transcripts` as the anchor.
+**Only proceed after the user has explicitly confirmed which todos to include (Step 3).**
+
+Insert the confirmed todos into the note body. Placement depends on the note's template:
+
+#### Daily Standup notes (`Meetings/*/Scrum/YYYY-MM-DD.md`)
+
+These follow the [Daily Standup template](../../Templates/Daily%20Standup.md):
+
+```
+Yesterday
+- ...
+Today
+- ...          ← INSERT TODOS HERE (append after existing Today items)
+Blockers
+- ...
+---
+Pending/Carry-over Backlog
+- ...
+```
+
+Insert todos at the **end of the "Today" section**, just before the `Blockers` line. Use `StrReplace` targeting `Blockers` as the anchor.
+
+#### Other meeting notes
+
+Insert after any existing user content but before `## 🤖 AI Notes` (or `## AI Transcripts`). If neither heading exists, append after the frontmatter closing `---`. Use `StrReplace` targeting the heading as the anchor.
+
+#### General rules
+
 - Group by owner if multiple people are involved.
+- Preserve existing content in the section — always append, never overwrite.
 
 ### Step 5: Mark as processed
 

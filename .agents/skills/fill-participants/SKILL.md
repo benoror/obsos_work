@@ -86,18 +86,69 @@ Present results grouped into:
 
 Also flag if any existing `@Person.md` files are missing key properties (FullName, Team) that were discovered from Google Docs.
 
-### Step 5: Apply changes
+### Step 5: Link unlinked names in note body
+
+Scan the **entire file content** (body + AI transcript callouts) for mentions of people that are not already wrapped in `[[@Name]]` wikilinks. This catches plain-text references from Gemini transcripts and manual notes.
+
+#### 5a: Build a name dictionary
+
+From `Teams/People/`, build a lookup of all possible name variants for each person:
+
+| Source | Example | Matches `@Rob.md` |
+|--------|---------|-------------------|
+| Filename (without `@` and `.md`) | `Rob` | Yes |
+| `FullName` frontmatter | `Rob Klock` | Yes |
+| First name (from FullName) | `Rob` | Yes |
+| First name (from filename) | `Rob` | Yes |
+| Common nicknames | — | Only if explicitly listed in person file |
+
+Also match names preceded by `@` that aren't already wikilinks (e.g. `@Rob` but not `[[@Rob]]`).
+
+#### 5b: Scan for unlinked mentions
+
+Search the note body for each name variant. Skip matches that:
+- Are already inside `[[@...]]` wikilinks
+- Are inside frontmatter (`---` fences)
+- Are partial word matches (e.g. "Robert" should not match "Rob" — use word boundary matching)
+- Are inside URLs or code blocks
+
+#### 5c: Present matches for confirmation
+
+**⚠️ MANDATORY: Always prompt the user before replacing. Never auto-replace — false positives are common with first names and nicknames.**
+
+Display a numbered table of proposed replacements:
+
+```
+| # | Replace? | Found text | → Link | Context (surrounding text) |
+|---|----------|------------|--------|---------------------------|
+| 1 | ✅ | Rob Klock | [[@Rob]] | "...assigned Rob Klock a bug ticket..." |
+| 2 | ✅ | @Zach | [[@Zak]] | "...recent changes made by @Zach..." |
+| 3 | ⬜ | Victor | [[@Victor]] | "...Victor confirmed they have been..." |
+| 4 | ⬜ | Ben | — (skip, it's the user) | "...Your Name and Ben agreed..." |
+```
+
+- Default `✅` for full-name matches (high confidence).
+- Default `⬜` for first-name-only or nickname matches (need confirmation).
+- Always skip linking the user's own name (Your Name / Ben) — these don't need wikilinks.
+- Show a short context snippet so the user can judge correctness.
+- Let the user toggle by saying numbers (e.g. "1,2" or "all" or "none").
+
+#### 5d: Apply confirmed replacements
+
+Use `StrReplace` for each confirmed match. When a name appears multiple times, ask the user if they want to replace all occurrences or specific ones.
+
+### Step 6: Apply frontmatter changes
 
 For each file, add `Participants:` to the YAML frontmatter just before the closing `---`. Use `StrReplace` targeting a unique anchor (last line before `---`).
 
-### Step 6: Handle intentionally blank meetings
+### Step 7: Handle intentionally blank meetings
 
 For meetings where participants genuinely can't be determined:
 - Use **team links** where the meeting clearly belongs to a team (e.g. `[[+QA]]`, `[[+Eng]]`).
 - Use **`—`** (em-dash) as the universal "intentionally left blank" marker for true unknowns.
 - Never leave the field absent — every meeting should end up with a Participants value.
 
-## Step 7: Offer to commit
+## Step 8: Offer to commit
 
 See [/commit](../commit/SKILL.md). Skip when called as part of a sequence (e.g. `/meeting wrap`).
 

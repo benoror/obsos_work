@@ -1,4 +1,7 @@
 **/.DS_Store
 .trash/
 .obsidian/workspace.json
+.obsidian/graph.json
+.obsidian/plugins/file-explorer-plus/data.json
+.obsidian/plugins/obsidian-icon-folder/data.json
 node_modules/

@@ -5,17 +5,16 @@ globs: .cursor/skills/**
 
 # Obsidian Vault — Skill Conventions
 
-## Commit Step
+## Shared Conventions
 
-Every skill that modifies files MUST include a final step referencing the shared commit skill:
+Skills that share common patterns MUST reference the shared convention instead of duplicating logic:
 
-```markdown
-## Offer to Commit
+| Convention | Reference | When to use |
+|------------|-----------|-------------|
+| Commit | `See [/commit](../commit/SKILL.md).` | Every skill that modifies files — final step |
+| Vault Context | `See [vault-context](../_shared/vault-context.md).` | Any skill that searches or reads vault content (meetings, tracker, notes) |
 
-See [/commit](../commit/SKILL.md).
-```
-
-This replaces inline commit logic. Never duplicate the commit workflow — always delegate.
+Never duplicate these workflows — always delegate.
 
 ## Structure
 
@@ -56,4 +55,5 @@ Reference these for patterns and to avoid duplication:
 | `/cache-notes` | Fetch & embed AI transcripts as Obsidian callouts (prompts for URLs if empty) |
 | `/fill-participants` | Resolve and fill Participants frontmatter |
 | `/followup-todos` | Extract action items as Obsidian Tasks checkboxes |
+| `/recap` | Produce a weekly/date-range recap from emails, Slack, Jira/Confluence, and vault notes |
 | `/commit` | Stage and commit with inferred message (from diff) or explicit intent; supports sequence mode |

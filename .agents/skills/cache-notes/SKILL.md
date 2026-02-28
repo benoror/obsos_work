@@ -151,20 +151,7 @@ Wrong document? [Continue anyway / Skip this URL / Replace URL]
 
 ### Date Parsing
 
-Dates can appear in many formats across filenames and doc titles. Recognize at least:
-
-| Format | Example | Source |
-|--------|---------|--------|
-| `YYYY-MM-DD` | `2026-02-24` | Note filenames |
-| `YYYY/MM/DD` | `2026/02/24` | Gemini doc titles |
-| `MM/DD/YYYY` | `02/24/2026` | US-style |
-| `DD/MM/YYYY` | `24/02/2026` | Intl-style |
-| `Month DD, YYYY` | `February 24, 2026` | Long form |
-| `Mon DD, YYYY` | `Feb 24, 2026` | Short form |
-| `DD Month YYYY` | `24 February 2026` | Intl long form |
-| ISO 8601 | `2026-02-24T09:43:00` | Frontmatter timestamps |
-
-When ambiguous (e.g. `02/03/2026` — Feb 3 or Mar 2?), prefer the interpretation closest to the note's date. If still ambiguous, skip verification and don't warn.
+See [date-filter](../_shared/date-filter.md) § "Date Parsing" for the full list of recognized formats and ambiguity rules.
 
 ### Skip verification
 

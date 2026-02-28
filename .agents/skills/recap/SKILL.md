@@ -12,19 +12,9 @@ description: "Produce a weekly/date-range recap from emails, Slack, Jira/Conflue
 
 ### Date Filtering
 
-Same syntax as `/meeting wrap pending [dates]`:
+See [date-filter](../_shared/date-filter.md) for the full syntax and date parsing rules.
 
-| Input | Matches |
-|-------|---------|
-| *(omitted)* | Monday through today (current week) |
-| `today` | Today's date only |
-| `yesterday` | Yesterday's date only |
-| `this week` | Monday through today |
-| `last week` | Previous Monday through Sunday |
-| `2026-02-25` | Specific date |
-| `2026-02-01..2026-02-28` | Inclusive date range |
-
-Literals are case-insensitive.
+Default (omitted): Monday through today (current week).
 
 ## Data Sources
 
@@ -99,7 +89,7 @@ Before producing the summary:
 
 1. **Merge duplicates**: The same topic may appear in email, Slack, meeting notes, and Jira. Group related items by topic/project.
 2. **Identify gaps**: Flag topics that appear in one source but not others (e.g. a Slack decision that has no Jira ticket, or a meeting commitment with no follow-up email).
-3. **Resolve people**: Map names to `[[@Name]]` wikilinks using `Teams/People/` files where possible.
+3. **Resolve people**: Map names to `[[@Name]]` wikilinks. See [people-resolver](../_shared/people-resolver.md).
 
 ### Step 4: Produce the recap summary
 
@@ -137,7 +127,8 @@ For busy weeks, group highlights under `### Project/Topic` sub-headings:
 ## 📋 Open / Pending Items
 
 Action items, requests, and commitments that are still open or need follow-up.
-Use Obsidian Tasks format. Group by project when there are many items.
+Use Obsidian Tasks format (see [obsidian-tasks](../_shared/obsidian-tasks.md)).
+Group by project when there are many items.
 
 ### Project A
 - [ ] Description 🔼 📅 YYYY-MM-DD
@@ -197,5 +188,4 @@ See [/commit](../commit/SKILL.md).
 - **Volume control**: For busy weeks, prioritize depth over breadth. Summarize high-volume sources (e.g. 200 emails) rather than listing every item.
 - **Gmail query limits**: The Gmail MCP returns paginated results. Fetch up to 50 messages per search; if more exist, note the total count and focus on the most relevant.
 - **Graceful degradation**: The skill must work with just Gmail + vault notes. Slack and Atlassian are additive — their absence should not block the recap.
-- **Timezone**: All dates use `-06:00` (CST).
-- **The user is Your Name ("Ben")**: Filter and prioritize content relevant to them.
+- **Timezone**: All dates use `-06:00` (CST). See `skill-conventions.mdc` Project Context.

@@ -13,24 +13,6 @@ description: "Create or wrap meeting notes. Args: {title} [folder=X], wrap <path
 - `/meeting wrap <path>` — Wrap up an existing meeting by running `/cache-notes`, `/fill-participants`, and `/followup-todos` in sequence, with a single commit at the end.
 - `/meeting wrap pending [<dates>]` — Find meetings missing any wrap step and wrap them in sequence. Optional date filter (see Mode D).
 
-## Workspace Layout
-
-```
-Meetings/           # All meeting notes, organized by subfolder
-  PAM/              # e.g. PAM team meetings
-  PAM/Scrum/        # Scrum dailies
-  TBs/              # Tech briefs / 1:1s
-  One-on-ones/      # 1:1 meetings
-  Eng/              # Engineering-wide
-  QA/               # QA team
-  HiRing/           # Interviews
-  Onboarding/       # Onboarding sessions
-  PE Leadership/    # PE leadership meetings
-Templates/          # Obsidian templates (Daily Standup, Sprint Retro, etc.)
-Teams/People/       # Person files: @Name.md
-Teams/              # Team files: +TeamName.md
-```
-
 ## File Naming
 
 Format: `{Title} - YYYY-MM-DD.md`
@@ -106,7 +88,7 @@ Case-insensitive matching. If no shorthand matches and the folder doesn't exist,
    - If it's a 1:1 (2 attendees), suggest `One-on-ones/` or `TBs/`.
    - Otherwise, ask the user.
 6. **Create the file** following the same steps as Mode A (steps 3-6).
-7. **Pre-fill Participants** from calendar attendees by matching against `Teams/People/` files. Use `[[@Name]]` wikilink format. Flag any unmatched attendees.
+7. **Pre-fill Participants** from calendar attendees. See [people-resolver](../_shared/people-resolver.md) for name matching rules. Flag any unmatched attendees.
 
 ## Mode C: Wrap Up (`/meeting wrap`)
 
@@ -146,19 +128,9 @@ For each pending file, show which steps are missing so the user knows what to ex
 
 ### Date Filtering
 
-When `<dates>` is provided, only consider meetings whose date matches. The date is extracted from the filename (`YYYY-MM-DD` pattern — either `{Title} - YYYY-MM-DD.md` or `YYYY-MM-DD.md` for scrum dailies).
+See [date-filter](../_shared/date-filter.md) for the full syntax and date parsing rules.
 
-| Input | Matches |
-|-------|---------|
-| *(omitted)* | All pending meetings |
-| `today` | Today's date |
-| `yesterday` | Yesterday's date |
-| `this week` | Monday through today (current week) |
-| `last week` | Previous Monday through Sunday |
-| `2026-02-25` | Specific date |
-| `2026-01-01..2026-02-03` | Inclusive date range |
-
-Literals are case-insensitive.
+When `<dates>` is provided, only consider meetings whose date matches. Default (omitted): all pending meetings.
 
 ### Workflow
 

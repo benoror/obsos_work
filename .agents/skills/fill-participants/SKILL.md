@@ -10,17 +10,9 @@ description: "Resolve and fill Participants frontmatter + link unlinked names in
 - `/fill-participants all` — Scan all meetings, find those missing Participants, resolve and fill them.
 - `/fill-participants <path>` — Fill participants for a specific meeting note (relative to workspace root, e.g. `Meetings/PAM/Some Meeting.md`).
 
-## Workspace Layout
-
-```
-Meetings/          # All meeting notes, organized by subfolder
-Teams/People/      # Person files: @Name.md with frontmatter (FullName, Team, Location, Office)
-Teams/             # Team files: +TeamName.md (e.g. +PAM.md, +Data.md, +QA.md)
-Meetings.base      # Obsidian DB view config — Participants is a frontmatter property
-People.base        # Obsidian DB view config — People have Team, FullName, Location, Office
-```
-
 ## Frontmatter Conventions
+
+See [people-resolver](../_shared/people-resolver.md) for wikilink format and name matching rules.
 
 Participants live in YAML frontmatter as either:
 
@@ -35,13 +27,7 @@ Participants:
 
 # Team-wide meetings
 Participants: "[[+PAM]]"
-
-# Team-level shorthand for large-group meetings
-Participants: "[[+Eng]]"
 ```
-
-Person links use `[[@Name]]` matching filenames in `Teams/People/` (without the `.md`).
-Team links use `[[+TeamName]]` matching filenames in `Teams/` (without the `.md`).
 
 ## Workflow
 
@@ -60,25 +46,18 @@ See [vault-context](../_shared/vault-context.md) for vault discovery conventions
 
 ### Step 2: Gather participant info for each target
 
-For each meeting missing Participants, determine attendees using this priority:
+For each meeting missing Participants, determine attendees using the resolution priority defined in [people-resolver](../_shared/people-resolver.md). In summary:
 
-1. **Google Docs Notes** — If the frontmatter has a `Notes:` property with a `docs.google.com/document/d/` URL, extract the document ID and call `google-workspace-get_doc_as_markdown` (email: check frontmatter or use workspace default). Gemini meeting summaries name participants explicitly. Note: Gemini anonymizes some speakers as "someone in [location]" — cross-reference with known people.
+1. **Google Docs Notes** — Gemini summaries name participants explicitly. Extract doc ID from `Notes:` frontmatter and call `google-workspace-get_doc_as_markdown`.
+2. **File name** — `X x Y` patterns.
+3. **File content** — Existing `[[@Name]]` references.
+4. **Folder conventions** — e.g. `Meetings/PAM/Scrum/` → `[[+PAM]]`.
+5. **Similar meetings** — Recurring meeting with same name, different date.
+6. **Tracker.md** — Jira ticket assignees for disambiguation.
 
-2. **File name** — Names in `X x Y` patterns (e.g. "Chris x Ben 2026-02-10.md") directly indicate participants.
+### Step 3: Match names to People files
 
-3. **File content** — Look for `[[@Name]]` references in the body.
-
-4. **Folder conventions** — Files under `Meetings/PAM/Scrum/` are typically `[[+PAM]]` meetings (daily standups, sprint planning, retros, grooming).
-
-5. **Similar meetings** — Check if a recurring meeting (same name, different date) already has Participants set, and reuse that pattern.
-
-6. **Tracker.md** — Read `Tracker.md` and scan for `[[@Name]]` wikilinks associated with Jira tickets mentioned in the meeting note. This helps resolve ambiguous names (e.g. Gemini's "someone in [location]") when a ticket assignee matches the context.
-
-### Step 3: Match names to People.base
-
-- Read all files in `Teams/People/` to build a name lookup (filename → FullName).
-- Match names from Google Docs against both `@Filename` and `FullName` property.
-- Flag any unmatched names for user confirmation.
+Build a name dictionary per [people-resolver](../_shared/people-resolver.md). Match names from Google Docs against the dictionary. Flag any unmatched names for user confirmation.
 
 ### Step 4: Present findings and ask for confirmation
 
@@ -86,7 +65,7 @@ Present results grouped into:
 
 1. **Confident matches** — Table of meeting → proposed Participants. Apply without asking.
 2. **Needs confirmation** — Ambiguous matches, unknown people, or meetings with only Otter.ai links (no Google Doc). Ask the user.
-3. **New people** — Names not in People.base. Ask which Team they belong to, then create the `@Name.md` file.
+3. **New people** — Names not in People files. See [people-resolver](../_shared/people-resolver.md) § "Creating New People".
 
 Also flag if any existing `@Person.md` files are missing key properties (FullName, Team) that were discovered from Google Docs.
 
@@ -96,25 +75,11 @@ Scan the **entire file content** (body + AI transcript callouts) for mentions of
 
 #### 5a: Build a name dictionary
 
-From `Teams/People/`, build a lookup of all possible name variants for each person:
-
-| Source | Example | Matches `@Rob.md` |
-|--------|---------|-------------------|
-| Filename (without `@` and `.md`) | `Rob` | Yes |
-| `FullName` frontmatter | `Rob Klock` | Yes |
-| First name (from FullName) | `Rob` | Yes |
-| First name (from filename) | `Rob` | Yes |
-| Common nicknames | — | Only if explicitly listed in person file |
-
-Also match names preceded by `@` that aren't already wikilinks (e.g. `@Rob` but not `[[@Rob]]`).
+Use the name dictionary and matching rules from [people-resolver](../_shared/people-resolver.md).
 
 #### 5b: Scan for unlinked mentions
 
-Search the note body for each name variant. Skip matches that:
-- Are already inside `[[@...]]` wikilinks
-- Are inside frontmatter (`---` fences)
-- Are partial word matches (e.g. "Robert" should not match "Rob" — use word boundary matching)
-- Are inside URLs or code blocks
+Search the note body for each name variant, following the word boundary and skip rules in [people-resolver](../_shared/people-resolver.md).
 
 #### 5c: Present matches for confirmation
 

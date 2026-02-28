@@ -57,12 +57,11 @@ Tracker.md             Project tracker
 
 ## Conventions
 
+- **User**: See [USER.md](USER.md) for identity, timezone, aliases, and agent behavior rules.
 - **Frontmatter**: YAML between `---` fences. `modified:` is managed by Obsidian — never set manually.
 - **Participants**: `[[@Name]]` wikilinks (people) or `[[+Team]]` (teams).
 - **AI Transcripts**: Cached under `## 🤖 AI Notes` with provider subheadings and collapsible callouts (`[!gemini_notes]-`, `[!gemini_todos]-`, `[!gemini_transcript]-`).
 - **Tasks priorities**: 🔺 highest, ⏫ high, 🔼 medium, 🔽 low.
-- **Timezone**: `-06:00` (CST).
-- **User**: Your Name / "Ben".
 
 ## MCP Servers
 

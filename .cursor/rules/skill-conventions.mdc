@@ -13,6 +13,9 @@ Skills that share common patterns MUST reference the shared convention instead o
 |------------|-----------|-------------|
 | Commit | `See [/commit](../commit/SKILL.md).` | Every skill that modifies files — final step |
 | Vault Context | `See [vault-context](../_shared/vault-context.md).` | Any skill that searches or reads vault content (meetings, tracker, notes) |
+| Date Filter | `See [date-filter](../_shared/date-filter.md).` | Any skill that accepts `[dates]` arguments or parses dates from filenames/content |
+| Obsidian Tasks | `See [obsidian-tasks](../_shared/obsidian-tasks.md).` | Any skill that creates or reads task checkboxes |
+| People Resolver | `See [people-resolver](../_shared/people-resolver.md).` | Any skill that resolves names to `[[@Name]]` wikilinks |
 
 Never duplicate these workflows — always delegate.
 
@@ -29,8 +32,7 @@ Skills live in `.cursor/skills/{skill-name}/SKILL.md`. Follow the existing patte
 ## Project Context
 
 - This is an **Obsidian vault** synced via iCloud
-- Timezone: `-06:00` (CST)
-- The user is **Your Name** ("Ben")
+- User identity, timezone, and aliases: see [USER.md](../../USER.md)
 - People files: `Teams/People/@Name.md`
 - Team files: `Teams/+TeamName.md`
 - Meeting notes: `Meetings/{subfolder}/`
@@ -38,12 +40,9 @@ Skills live in `.cursor/skills/{skill-name}/SKILL.md`. Follow the existing patte
 
 ## Obsidian Tasks Priorities
 
-```
-🔺 Highest — blocking, deadline this week, critical path
-⏫ High    — important but not urgent, next sprint
-🔼 Medium  — moderate urgency
-🔽 Low     — low urgency
-```
+Quick reference (full spec in [obsidian-tasks](../_shared/obsidian-tasks.md)):
+
+`🔺` Highest · `⏫` High · `🔼` Medium · `🔽` Low
 
 ## Existing Skills
 

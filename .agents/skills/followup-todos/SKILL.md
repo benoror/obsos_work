@@ -16,71 +16,7 @@ The meeting file should ideally have cached AI transcripts (from `/cache-notes`)
 
 ## Obsidian Tasks Format
 
-Todos use the [Obsidian Tasks](https://publish.obsidian.md/tasks/) plugin syntax. A full task line looks like:
-
-```markdown
-- [ ] [[@Assignee]] Description 🔼 🛫 2026-03-01 📅 2026-03-07 🔁 every week
-```
-
-### Checkbox states
-
-| State | Syntax | Meaning |
-|-------|--------|---------|
-| Open | `- [ ]` | Not started |
-| Done | `- [x]` | Completed (append `✅ YYYY-MM-DD`) |
-| In progress | `- [/]` | Started |
-| Cancelled | `- [-]` | Cancelled (append `❌ YYYY-MM-DD`) |
-
-### Task components (recommended order)
-
-| Element | Emoji | Format | Required |
-|---------|-------|--------|----------|
-| Checkbox | — | `- [*]` | Yes |
-| Assignee | — | `[[@Name]]` wikilink prefix | If not the user |
-| Description | — | Free text | Yes |
-| Priority | `🔺⏫🔼🔽` | After description | Optional |
-| Created date | `➕` | `➕ YYYY-MM-DD` | Optional (auto-set if desired) |
-| Start date | `🛫` | `🛫 YYYY-MM-DD` — earliest date to begin work | Optional |
-| Scheduled date | `⏳` | `⏳ YYYY-MM-DD` — date planned to work on it | Optional |
-| Due date | `📅` | `📅 YYYY-MM-DD` — hard deadline | Optional |
-| Done date | `✅` | `✅ YYYY-MM-DD` | When completing |
-| Cancelled date | `❌` | `❌ YYYY-MM-DD` | When cancelling |
-| Recurrence | `🔁` | `🔁 every <interval>` (e.g. `every week`, `every month on the 1st`) | Optional |
-
-### Priorities
-
-```
-🔺 Highest — blocking, deadline this week, critical path
-⏫ High    — important but not urgent, next sprint
-🔼 Medium  — moderate urgency
-🔽 Low     — low urgency
-```
-
-### Date inference
-
-When extracting todos, infer dates from meeting context:
-
-| Phrase | Maps to |
-|--------|---------|
-| "today", "end of day" | `📅` = meeting date |
-| "tomorrow" | `📅` = meeting date + 1 |
-| "by Friday", "end of week" | `📅` = that Friday |
-| "Monday", "next week" | `📅` = next Monday |
-| "next sprint" | `🛫` = next sprint start (if known) |
-| "start working on X" | `🛫` = inferred start date |
-| "schedule for <date>" | `📅` = that date |
-
-When in doubt, include the date in the proposal table (Step 3) and let the user confirm.
-
-### Nested sub-tasks
-
-Use tab indentation:
-
-```markdown
-- [ ] Main task 🔼
-	- [ ] Sub-task 1
-	- [ ] Sub-task 2
-```
+See [obsidian-tasks](../_shared/obsidian-tasks.md) for the full spec: checkbox states, component order, priorities, date inference, nesting, and assignee rules.
 
 ## Workflow
 
@@ -109,23 +45,16 @@ Also extract:
 
 For each candidate action item (from manual notes, transcript todos, or implicit commitments in details), determine:
 
-1. **Owner**: Who is responsible? Map names to `[[@Name]]` wikilinks using `Teams/People/` files.
-   - If the owner is the user (Your Name / "Ben"), omit the assignee prefix.
-   - If the owner is "someone in [location]" (Gemini anonymization), try to resolve from context or Participants.
-   - If the owner is someone else, prefix with `[[@Name]]`.
+1. **Owner**: Who is responsible? See [people-resolver](../_shared/people-resolver.md) for name matching and assignee rules.
 
 2. **Relevance**: Score as `high`, `medium`, or `skip`:
    - **High**: Action is for the user, has a clear deliverable, or is time-sensitive.
    - **Medium**: Action is for someone else but the user should track it, or it's vague but potentially important.
    - **Skip**: Purely informational, already completed (based on date vs today), or not actionable.
 
-3. **Priority**: Based on urgency and impact:
-   - `🔺` — Blocking others, deadline this week, or critical path.
-   - `⏫` — Important but not urgent, next sprint.
-   - `🔼` — Moderate urgency, nice-to-have.
-   - `🔽` — Low urgency.
+3. **Priority**: Based on urgency and impact (see priorities in [obsidian-tasks](../_shared/obsidian-tasks.md)).
 
-4. **Dates**: Infer from meeting context using the date inference table above. Assign `📅` (due), `🛫` (start), or `⏳` (scheduled) as appropriate. Omit if no date is mentioned or inferable.
+4. **Dates**: Infer from meeting context using the date inference rules in [obsidian-tasks](../_shared/obsidian-tasks.md). Assign `📅` (due), `🛫` (start), or `⏳` (scheduled) as appropriate. Omit if no date is mentioned or inferable.
 
 ### Step 3: Present proposals to the user — MANDATORY CONFIRMATION
 
@@ -190,7 +119,6 @@ See [/commit](../commit/SKILL.md). Skip when called as part of a sequence (e.g. 
 ## Important Notes
 
 - Always read the file before editing — frontmatter may have changed via iCloud sync.
-- The user is Your Name. References to "Your Name", "Ben", or "someone in [Your City/Country]" are the user.
 - Do NOT duplicate todos that already exist in the note body (compare by description similarity).
 - When in doubt about relevance, include it as `⬜` and let the user decide.
 - If the meeting is old (>2 weeks), flag items that may already be completed and suggest skipping them.

@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Stage and commit changes with an inferred or skill-provided message. Can be called standalone (/commit) or as a final step from other skills. Analyzes diffs to craft meaningful commit messages.
+description: "Stage and commit with inferred or explicit message. Args: [description], [file/path]. No args = infer from diff."
 ---
 
 # Commit

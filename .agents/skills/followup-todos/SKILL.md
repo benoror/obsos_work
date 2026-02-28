@@ -1,6 +1,6 @@
 ---
 name: followup-todos
-description: Extracts actionable follow-up items from a meeting's cached AI transcript and proposes them as Obsidian todo checkboxes. Filters by relevance, assigns owners, and suggests priorities. Use when the user says /followup-todos or asks to extract action items or todos from a meeting.
+description: "Extract action items as Obsidian Tasks checkboxes (with confirmation). Args: <path>. No args = pick from recent meetings."
 ---
 
 # Follow-up Todos

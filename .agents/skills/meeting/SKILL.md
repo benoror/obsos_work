@@ -1,6 +1,6 @@
 ---
 name: meeting
-description: Creates a new Obsidian meeting note or wraps up an existing one. Supports manual creation, Google Calendar selection, and a wrap-up workflow that caches notes, fills participants, and extracts todos in sequence. Use when the user says /meeting or asks to create or wrap up a meeting note.
+description: "Create or wrap meeting notes. Args: {title} [folder=X], wrap <path>, wrap pending [today|this week|dates]. No args = pick from Google Calendar."
 ---
 
 # Meeting

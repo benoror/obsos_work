@@ -1,6 +1,6 @@
 ---
 name: fill-participants
-description: Fills missing Participants frontmatter in Obsidian meeting notes. Scans Meetings/ for notes without Participants, resolves names from Google Docs via MCP, matches against People.base and Teams, and applies changes with user confirmation. Use when the user says /fill-participants, asks to fill participants, or wants to update meeting attendees.
+description: "Resolve and fill Participants frontmatter + link unlinked names in body. Args: <path>, all."
 ---
 
 # Fill Participants

@@ -1,6 +1,6 @@
 ---
 name: cache-notes
-description: Fetches external meeting resources (Gemini Google Docs, Otter.ai) and caches them inline as collapsible Obsidian callouts. Saves tokens and API calls on subsequent reads. Use when the user says /cache-notes or asks to cache, embed, or download meeting notes.
+description: "Fetch & embed AI transcripts as Obsidian callouts. Args: <path>, all, refresh <path>. Prompts for URLs if empty."
 ---
 
 # Cache Notes

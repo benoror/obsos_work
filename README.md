@@ -130,10 +130,10 @@ If you forked or cloned this repo into a private vault, you can pull structural 
 git remote add upstream <url-to-this-repo>
 
 # Pull updates (auto-configures merge driver on first run)
-./scripts/sync-upstream.sh
+./.scripts/sync-upstream.sh
 
 # Preview what's new without merging
-./scripts/sync-upstream.sh --preview
+./.scripts/sync-upstream.sh --preview
 ```
 
 Personal paths are protected during merges via `.gitattributes` — your `USER.md`, `Tracker.md`, `.env`, `.cursor/mcp.json`, `Meetings/`, `Teams/`, `Templates/`, and `Recaps/` are always kept as-is. Edit `.gitattributes` to add or remove protected paths.

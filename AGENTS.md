@@ -77,15 +77,15 @@ Configured in [.cursor/mcp.json](.cursor/mcp.json). Provides Google Workspace to
 If you forked or cloned this repo into a private vault, you can pull structural updates (skills, rules, shared conventions) without overwriting your personal data.
 
 ```bash
-./scripts/sync-upstream.sh              # fetch + merge
-./scripts/sync-upstream.sh --preview    # see what's new without merging
+./.scripts/sync-upstream.sh              # fetch + merge
+./.scripts/sync-upstream.sh --preview    # see what's new without merging
 ```
 
 First-time setup:
 
 ```bash
 git remote add upstream <url-to-this-repo>
-./scripts/sync-upstream.sh              # auto-configures merge driver on first run
+./.scripts/sync-upstream.sh              # auto-configures merge driver on first run
 ```
 
 Protected paths (always keep local version during merge): `USER.md`, `Tracker.md`, `.env`, `.cursor/mcp.json`, `Meetings/`, `Teams/`, `Templates/`, `Recaps/`. Edit `.gitattributes` to add or remove paths.

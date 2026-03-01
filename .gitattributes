@@ -5,7 +5,7 @@
 # Requires the "ours" merge driver:
 #   git config merge.ours.driver true
 #
-# The sync script (scripts/sync-upstream.sh) auto-configures this on first run.
+# The sync script (.scripts/sync-upstream.sh) auto-configures this on first run.
 
 # Personal / sensitive
 USER.md merge=ours

@@ -23,7 +23,10 @@ Slash commands that run inside your vault, powered by any AI agent:
 Agent-agnostic — works with [Cursor](https://cursor.com), [Claude Code](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview), [OpenCode](https://github.com/opencode-ai/opencode), or any MCP-compatible client. Clone it, fill in `USER.md`, and go.
 
 <p align="center">
-  <a href=".assets/demo.png"><img src=".assets/demo.png" alt="Demo screenshot" width="720" /></a>
+  <a href=".assets/demo-obsidian.png"><img src=".assets/demo-obsidian.png" alt="Obsidian vault demo" width="720" /></a>
+</p>
+<p align="center">
+  <a href=".assets/demo-cursor-cli.png"><img src=".assets/demo-cursor-cli.png" alt="Cursor CLI demo — /recap this week" width="720" /></a>
 </p>
 
 ## Compatible agents

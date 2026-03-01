@@ -29,9 +29,7 @@ See [AGENTS.md](AGENTS.md) for the full skill reference, vault conventions, and 
 
 - [Cursor](https://cursor.com) IDE or [CLI](https://docs.cursor.com/cli) (or any agent that supports MCP — see [Compatible agents](#compatible-agents))
 - [Node.js](https://nodejs.org/) v20+
-- [Obsidian](https://obsidian.md/) with these community plugins:
-  - **Tasks** — checkbox syntax and queries
-  - **Frontmatter Modified Date** — auto-updates `modified:` in YAML frontmatter
+- [Obsidian](https://obsidian.md/) (see [Obsidian plugins](#obsidian-plugins) below)
 - [uvx](https://docs.astral.sh/uv/) (Python) — runs the Google Workspace MCP server
 
 ## Setup
@@ -94,6 +92,34 @@ A default [`Teams/People/@Me.md`](Teams/People/@Me.md) is included as the vault 
 ### 6. Open in Obsidian + Cursor
 
 Open the vault folder in both Obsidian (for viewing/editing notes) and Cursor (for running agent skills). Cursor will auto-load the MCP servers from `.cursor/mcp.json` and the rules from `.cursor/rules/`.
+
+## Obsidian plugins
+
+The vault works with vanilla Obsidian, but these community plugins power specific features. Install whichever you need from **Settings → Community plugins → Browse**.
+
+### Required
+
+| Plugin | ID | Used by |
+|---|---|---|
+| [Tasks](https://publish.obsidian.md/tasks/) | `obsidian-tasks-plugin` | `ToDo's.md` queries, `/followup-todos` checkbox syntax, task priorities |
+| [Update modified date](https://github.com/alangrainger/obsidian-frontmatter-modified-date) | `frontmatter-modified-date` | Auto-updates `modified:` in YAML frontmatter when you edit a note |
+
+### Recommended
+
+| Plugin | ID | What it adds |
+|---|---|---|
+| [Natural Language Dates](https://github.com/argentinaos/nldates-obsidian) | `nldates-obsidian` | Type `@today` or `@next Monday` to insert date links — handy for task due dates |
+| [Calendar](https://github.com/liamcain/obsidian-calendar-plugin) | `calendar` | Sidebar calendar widget for navigating daily/meeting notes by date |
+
+### Optional (cosmetic / workflow)
+
+These are not required by any skill but improve the day-to-day experience:
+
+| Plugin | ID | What it adds |
+|---|---|---|
+| [Obsidian Git](https://github.com/Vinzent03/obsidian-git) | `obsidian-git` | Auto-backup vault to git on a schedule (alternative to `/commit`) |
+| [Auto Card Link](https://github.com/nekoshita/obsidian-auto-card-link) | `auto-card-link` | Paste a URL and get a rich preview card |
+| [File Explorer Note Count](https://github.com/ozntel/file-explorer-note-count) | `file-explorer-note-count` | Shows note count badges on folders |
 
 ## Project structure
 

@@ -1,0 +1,25 @@
+# Merge strategy: always keep local version for these paths when merging
+# from the upstream public repo. These files contain personal data,
+# vault-specific content, or local overrides.
+#
+# Requires the "ours" merge driver:
+#   git config merge.ours.driver true
+#
+# The sync script (scripts/sync-upstream.sh) auto-configures this on first run.
+
+# Personal / sensitive
+USER.md merge=ours
+Tracker.md merge=ours
+.env merge=ours
+.cursor/mcp.json merge=ours
+
+# Vault content (meetings, people, teams, notes)
+Meetings/** merge=ours
+Teams/** merge=ours
+Recaps/** merge=ours
+
+# Templates (upstream has generic examples, keep local customizations)
+Templates/** merge=ours
+
+# Add your own protected paths below:
+# MyFolder/** merge=ours

@@ -21,7 +21,8 @@ An Obsidian vault wired with AI agent skills. Agents can create meeting notes fr
 | `/fill-participants` | Resolve names in notes to `[[@Person]]` wikilinks |
 | `/followup-todos` | Extract action items as Obsidian Tasks checkboxes |
 | `/recap` | Weekly recap from emails, Slack, Jira, and vault notes |
-| `/commit` | Stage and commit with an auto-inferred message |
+| `/commit` | Stage and commit — accepts file/folder scope, free-text intent, or `amend` |
+| `/sync-upstream-obsidianos` | Pull structural updates from upstream ObsidianOS |
 
 Each skill supports multiple sub-commands and arguments — see [AGENTS.md](AGENTS.md) for the full reference.
 

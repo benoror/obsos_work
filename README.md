@@ -93,6 +93,8 @@ A default [`Teams/People/@Me.md`](Teams/People/@Me.md) is included as the vault 
 
 Open the vault folder in both Obsidian (for viewing/editing notes) and Cursor (for running agent skills). Cursor will auto-load the MCP servers from `.cursor/mcp.json` and the rules from `.cursor/rules/`.
 
+In Obsidian, hide non-vault folders from the file explorer: go to **Settings → Files & Links → Excluded files** and add `node_modules`.
+
 ## Obsidian plugins
 
 The vault works with vanilla Obsidian, but these community plugins power specific features. Install whichever you need from **Settings → Community plugins → Browse**.

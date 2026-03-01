@@ -19,7 +19,17 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
 WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))
-CREDS_PATH = os.path.expanduser('~/.google_workspace_mcp/credentials/you@example.com.json')
+_user_email = os.environ.get('GOOGLE_EMAIL')
+if not _user_email:
+    _user_md = os.path.join(WORKSPACE_ROOT, 'USER.md')
+    if os.path.exists(_user_md):
+        with open(_user_md) as _f:
+            _m = re.search(r'\*\*Email\*\*:\s*`?([^`\s]+)`?', _f.read())
+            if _m:
+                _user_email = _m.group(1)
+if not _user_email:
+    raise RuntimeError('Set GOOGLE_EMAIL env var or fill Email in USER.md')
+CREDS_PATH = os.path.expanduser(f'~/.google_workspace_mcp/credentials/{_user_email}.json')
 CST = timezone(timedelta(hours=-6))
 
 

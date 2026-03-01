@@ -93,12 +93,12 @@ Display a numbered table of proposed replacements:
 | 1 | ✅ | Rob Klock | [[@Rob]] | "...assigned Rob Klock a bug ticket..." |
 | 2 | ✅ | @Zach | [[@Zak]] | "...recent changes made by @Zach..." |
 | 3 | ⬜ | Victor | [[@Victor]] | "...Victor confirmed they have been..." |
-| 4 | ⬜ | Ben | — (skip, it's the user) | "...Your Name and Ben agreed..." |
+| 4 | ⬜ | Alex | — (skip, it's the user) | "...Alex Smith and Alex agreed..." |
 ```
 
 - Default `✅` for full-name matches (high confidence).
 - Default `⬜` for first-name-only or nickname matches (need confirmation).
-- Always skip linking the user's own name (Your Name / Ben) — these don't need wikilinks.
+- Always skip linking the vault owner's name (see `USER.md` Identity) — these don't need wikilinks.
 - Show a short context snippet so the user can judge correctness.
 - Let the user toggle by saying numbers (e.g. "1,2" or "all" or "none").
 

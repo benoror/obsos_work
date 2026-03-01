@@ -1,0 +1,100 @@
+# obsos_work
+
+An Obsidian vault wired with AI agent skills for [Cursor](https://cursor.com). Agents can create meeting notes from Google Calendar, cache AI transcripts, resolve participants, extract follow-up todos, produce weekly recaps, and commit changes — all via slash commands.
+
+## Skills
+
+| Command | What it does |
+|---|---|
+| `/meeting` | Create a meeting note (from Google Calendar or manual) |
+| `/meeting wrap <path>` | Cache transcripts → fill participants → extract todos → commit |
+| `/cache-notes <path>` | Fetch & embed AI meeting transcripts as Obsidian callouts |
+| `/fill-participants <path>` | Resolve names in notes to `[[@Person]]` wikilinks |
+| `/followup-todos <path>` | Extract action items as Obsidian Tasks checkboxes |
+| `/recap` | Weekly recap from emails, Slack, Jira, and vault notes |
+| `/commit` | Stage and commit with an auto-inferred message |
+
+See [AGENTS.md](AGENTS.md) for the full skill reference, vault conventions, and rules.
+
+## Prerequisites
+
+- [Cursor](https://cursor.com) (or any editor that supports `.cursor/rules` and MCP servers)
+- [Node.js](https://nodejs.org/) v20+
+- [Obsidian](https://obsidian.md/) with these community plugins:
+  - **Tasks** — checkbox syntax and queries
+  - **Frontmatter Modified Date** — auto-updates `modified:` in YAML frontmatter
+- [uvx](https://docs.astral.sh/uv/) (Python) — runs the Google Workspace MCP server
+
+## Setup
+
+### 1. Clone and install
+
+```bash
+git clone https://github.com/youruser/obsos_work.git
+cd obsos_work
+npm install
+```
+
+### 2. Fill in your identity
+
+Edit [`USER.md`](USER.md) with your name, email, timezone, and aliases. This is the single source of truth that all skills reference — no other file needs your personal info.
+
+### 3. Google Workspace MCP (optional)
+
+Required for `/meeting` (Calendar), `/cache-notes` (Docs), and `/recap` (Gmail).
+
+1. Create OAuth credentials in the [Google Cloud Console](https://console.cloud.google.com/apis/credentials) (Desktop app type).
+2. Enable the **Google Docs**, **Google Drive**, **Google Calendar**, and **Gmail** APIs.
+3. Copy the example env and fill in your credentials:
+
+```bash
+cp .env.example .env
+# Edit .env with your GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET, and USER_GOOGLE_EMAIL
+```
+
+On first use, the MCP server will open a browser for OAuth consent. Approve once and credentials are cached at `~/.google_workspace_mcp/`.
+
+See the [google_workspace_mcp](https://github.com/taylorwilsdon/google_workspace_mcp) repo for detailed setup.
+
+### 4. QMD vault search (optional)
+
+Required for `/recap` and vault-wide search. QMD indexes your markdown files for keyword and semantic search.
+
+```bash
+npx qmd collection add . --name my_vault
+npx qmd embed
+```
+
+The `npx qmd mcp` server (configured in `.cursor/mcp.json`) will serve searches from this index. Re-run `npx qmd embed` after adding significant new content.
+
+### 5. Create your vault structure
+
+The skills expect this layout — create the directories you need:
+
+```
+Meetings/          Meeting notes (create subfolders per team/project)
+Teams/People/      Person files: @Name.md (one per colleague)
+Teams/             Team files: +TeamName.md
+Templates/         Obsidian templates
+```
+
+A default [`Teams/People/@Me.md`](Teams/People/@Me.md) is included as the vault owner's person file.
+
+### 6. Open in Obsidian + Cursor
+
+Open the vault folder in both Obsidian (for viewing/editing notes) and Cursor (for running agent skills). Cursor will auto-load the MCP servers from `.cursor/mcp.json` and the rules from `.cursor/rules/`.
+
+## Project structure
+
+```
+.agents/skills/       Skill definitions (SKILL.md + supporting scripts)
+.cursor/rules/        Cursor rules (auto-injected by glob pattern)
+.cursor/mcp.json      MCP server configuration
+AGENTS.md             Agent reference: skills, conventions, vault layout
+USER.md               Vault owner identity (fill in after cloning)
+Templates/            Obsidian note templates
+```
+
+## License
+
+MIT

@@ -1,6 +1,15 @@
 # obsos_work
 
-An Obsidian vault wired with AI agent skills for [Cursor](https://cursor.com). Agents can create meeting notes from Google Calendar, cache AI transcripts, resolve participants, extract follow-up todos, produce weekly recaps, and commit changes — all via slash commands.
+An Obsidian vault wired with AI agent skills. Agents can create meeting notes from Google Calendar, cache AI transcripts, resolve participants, extract follow-up todos, produce weekly recaps, and commit changes — all via slash commands.
+
+## Compatible agents
+
+| Agent | Support level | Notes |
+|---|---|---|
+| [Cursor](https://cursor.com) IDE | Full | Loads `.cursor/rules/` and `.cursor/mcp.json` automatically |
+| [Cursor CLI](https://docs.cursor.com/cli) (`cursor`) | Full | Same engine in background/headless mode |
+| [Claude Code](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview) | Partial | Reads `AGENTS.md` natively; MCP servers need manual config |
+| Other MCP-compatible clients | Partial | Can use the MCP servers; `.cursor/rules/` won't auto-load |
 
 ## Skills
 
@@ -18,7 +27,7 @@ See [AGENTS.md](AGENTS.md) for the full skill reference, vault conventions, and 
 
 ## Prerequisites
 
-- [Cursor](https://cursor.com) (or any editor that supports `.cursor/rules` and MCP servers)
+- [Cursor](https://cursor.com) IDE or [CLI](https://docs.cursor.com/cli) (or any agent that supports MCP — see [Compatible agents](#compatible-agents))
 - [Node.js](https://nodejs.org/) v20+
 - [Obsidian](https://obsidian.md/) with these community plugins:
   - **Tasks** — checkbox syntax and queries
@@ -54,6 +63,8 @@ cp .env.example .env
 
 On first use, the MCP server will open a browser for OAuth consent. Approve once and credentials are cached at `~/.google_workspace_mcp/`.
 
+> [!INFO] Running it the first time will likely prompt your agent to walk you through the confiaguration step by step
+
 See the [google_workspace_mcp](https://github.com/taylorwilsdon/google_workspace_mcp) repo for detailed setup.
 
 ### 4. QMD vault search (optional)
@@ -67,18 +78,18 @@ npx qmd embed
 
 The `npx qmd mcp` server (configured in `.cursor/mcp.json`) will serve searches from this index. Re-run `npx qmd embed` after adding significant new content.
 
-### 5. Create your vault structure
+### 5. Vault structure
 
-The skills expect this layout — create the directories you need:
+The vault ships with these directories already in place:
 
 ```
-Meetings/          Meeting notes (create subfolders per team/project)
+Meetings/          Meeting notes (create subfolders per team/project as needed)
 Teams/People/      Person files: @Name.md (one per colleague)
 Teams/             Team files: +TeamName.md
 Templates/         Obsidian templates
 ```
 
-A default [`Teams/People/@Me.md`](Teams/People/@Me.md) is included as the vault owner's person file.
+A default [`Teams/People/@Me.md`](Teams/People/@Me.md) is included as the vault owner's person file. Add subfolders under `Meetings/` to organise notes by team or project (e.g. `Meetings/Eng/`, `Meetings/TBs/`).
 
 ### 6. Open in Obsidian + Cursor
 

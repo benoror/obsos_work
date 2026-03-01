@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".assets/ObsidianOS-logo.png" alt="ObsidianOS" width="480" />
+</p>
+
 # ObsidianOS - Work
 
 An Obsidian vault wired with AI agent skills. Agents can create meeting notes from Google Calendar, cache AI transcripts, resolve participants, extract follow-up todos, produce weekly recaps, and commit changes — all via slash commands.

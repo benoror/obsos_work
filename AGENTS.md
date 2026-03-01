@@ -1,7 +1,3 @@
----
-modified: 2026-02-28T11:47:14-06:00
-created: 2026-02-25T16:33:37-06:00
----
 # Agents
 
 This is an Obsidian vault with AI agent skills. See [USER.md](USER.md) for the vault owner's identity. Agents working in this repo should be aware of the following structure and conventions.

@@ -1,6 +1,3 @@
----
-created: 2026-02-28T18:00:00-06:00
----
 # User Profile
 
 This file is the single source of truth for the vault owner's identity. Skills, rules, and agents reference this instead of hardcoding user info. Fill in your details below after cloning.
